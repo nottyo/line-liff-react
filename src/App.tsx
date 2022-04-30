@@ -82,8 +82,8 @@ function App() {
         </div>
       )}
       {data && data.isLoggedIn && (
-        <div>
-          <img src={profile.pictureUrl} alt="profileUrl" loading="lazy" />
+        <div className="profile">
+          <img src={profile.pictureUrl} width="200" alt="profileUrl" loading="lazy" />
           <p data-testid="userId">userId: {profile.userId}</p>
           <p data-testid="displayName">displayName: {profile.displayName}</p>
         </div>
