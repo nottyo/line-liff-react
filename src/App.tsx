@@ -4,21 +4,46 @@ import "./App.css";
 
 function App() {
   const [message, setMessage] = useState("");
+  const [data, setData] = useState({ isInClient: false, os: 'ios', isInAppBrowser: false, isLoggedIn: false });
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    liff
-      .init({
-        liffId: import.meta.env.VITE_LIFF_ID
-      })
-      .then(() => {
-        setMessage("LIFF init succeeded.");
-      })
-      .catch((e: Error) => {
-        setMessage("LIFF init failed.");
-        setError(`${e}`);
+  const liffInit = async () => {
+    try {
+      await liff.init({ liffId: import.meta.env.VITE_LIFF_ID });
+      setMessage("LIFF init succeeded.");
+      const { userAgent } = navigator;
+      setData({
+        isInClient: liff.isInClient(),
+        isLoggedIn: liff.isLoggedIn(),
+        os: liff.getOS() as string,
+        isInAppBrowser: !liff.isInClient() && userAgent.includes('Line'),
       });
-  });
+    } catch (error) {
+      setMessage("LIFF init failed.");
+      setError(`${error}`);
+    }
+  }
+
+  useEffect(() => {
+    liffInit();
+  }, [message]);
+
+  const logout = () => {
+    liff.logout();
+  }
+
+  const login = () => {
+    liff.login();
+  }
+
+  const renderLoginButton = () => {
+    if (data.isLoggedIn) {
+      return (
+        <button data-testid="logout" onClick={logout}>Logout</button>
+      );
+    }
+    return <button data-testid="login" onClick={login}>Login</button>
+  }
 
   return (
     <div className="App">
@@ -29,13 +54,15 @@ function App() {
           <code>{error}</code>
         </p>
       )}
-      <a
-        href="https://developers.line.biz/ja/docs/liff/"
-        target="_blank"
-        rel="noreferrer"
-      >
-        LIFF Documentation
-      </a>
+      { data && (
+        <div>
+          <p data-testid="isInClient">liff.isInClient: {String(data.isInClient)}</p>
+          <p data-testid="os">liff.getOS: {data.os}</p>
+          <p data-testid="isInAppBrowser">isInAppBrowser: {String(data.isInAppBrowser)}</p>
+          <p data-testid="isLoggedIn">liff.isLoggedIn: {String(data.isLoggedIn)}</p>
+          {renderLoginButton()}
+        </div>
+      )}
     </div>
   );
 }
