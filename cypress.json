@@ -1,4 +1,9 @@
 {
   "baseUrl": "https://tymgk7.sse.codesandbox.io",
-  "experimentalSessionAndOrigin": true
+  "experimentalSessionAndOrigin": true,
+  "env": {
+    "LIFF_ID": "1655535261-Wq15ajOA",
+    "email": "<email>",
+    "password": "<password>"
+  }
 }
