@@ -81,9 +81,9 @@ function App() {
           {renderLoginButton()}
         </div>
       )}
-      {profile && (
+      {data && data.isLoggedIn && (
         <div>
-          <img src={profile.pictureUrl} loading="lazy" />
+          <img src={profile.pictureUrl} alt="profileUrl" loading="lazy" />
           <p data-testid="userId">userId: {profile.userId}</p>
           <p data-testid="displayName">displayName: {profile.displayName}</p>
         </div>
