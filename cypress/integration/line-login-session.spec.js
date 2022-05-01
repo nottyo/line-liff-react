@@ -1,7 +1,8 @@
-describe('simple login', () => {
+describe('login with session', () => {
   beforeEach(() => {
-    // do login before each test case so number of login = number of test cases
-    cy.lineLoginWithoutSession(Cypress.env('email'), Cypress.env('password'));
+    // login once for all test cases and preserve its login session.
+    cy.lineLoginWithSession(Cypress.env('email'), Cypress.env('password'));
+    cy.visit(Cypress.config('baseUrl'));
   });
 
   it('render profileUrl', () => {
